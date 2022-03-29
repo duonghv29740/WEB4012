@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
 // Su dung Request $request trong callback cua route
 
 /*
@@ -85,11 +86,6 @@ Route::get('/users/{userId}/{username?}', function (
     // dd($userId, $userName, $request->all());
 });
 
-// Route::get('/categories', [CategoryController::class, 'index'])
-// ->name('categories');
-
-// prefix: duong dan chung cua group, noi -> /categories/create
-// name: name chung cua group, noi cac name con: categories.index
 Route::prefix('/categories')->name('categories.')->group(function () {
     // Danh sach
     Route::get('/', [CategoryController::class, 'index'])->name('index');
@@ -101,4 +97,17 @@ Route::prefix('/categories')->name('categories.')->group(function () {
     Route::put('/update/{id}', [CategoryController::class, 'update'])->name('update');
     // Xoa
     Route::delete('/{cate}', [CategoryController::class, 'delete'])->name('delete');
+});
+
+Route::prefix('/products')->name('products.')->group(function () {
+    // Danh sach
+    Route::get('/', [ProductController::class, 'index'])->name('index');
+    // Tao moi
+    Route::get('/create', [ProductController::class, 'create'])->name('create');
+    Route::post('/store', [ProductController::class, 'store'])->name('store');
+    // Chinh sua
+    Route::get('/edit/{id}', [ProductController::class, 'edit'])->name('edit');
+    Route::put('/update/{id}', [ProductController::class, 'update'])->name('update');
+    // Xoa
+    Route::delete('/{cate}', [ProductController::class, 'delete'])->name('delete');
 });

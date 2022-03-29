@@ -9,9 +9,20 @@
 )
 
 @section('content')
-    <form action="{{route('categories.store')}}" class="form" method="POST">
+    <form action="{{isset($category) ? route('categories.update',$category->id) : route('categories.store')}}" 
+        class="form" method="POST">
         {{-- Bat buoc trong form se phai co token bang @csrf --}}
         @csrf
+        @if (isset($category))
+            @method('PUT')
+        @endif
+        @if ($errors->any())
+            <ul>
+                @foreach ($errors->all() as $e)
+                    <li class="text-danger">{{$e}}</li>
+                @endforeach
+            </ul>
+        @endif
         <div class="form-group">
             <label for="name">Name</label>
             <input

@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductRequest;
+use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -11,10 +14,21 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    // Tra ve danh sach cac ban ghi product
     public function index()
     {
-        //
+        $products = Product::orderBy('id','desc')->paginate(20);
+        return view('product.index',['products' => $products]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        $cate = Category::all();
+        return view('product.create',['categories' => $cate]);
     }
 
     /**
@@ -23,10 +37,22 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    // Tao ban ghi product moi
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        //
+        $product = new Product();
+        $product->name = $request->name;
+        $product->description = $request->description;
+        $product->short_description = $request->short_description;
+        $product->price = $request->price;
+        $product->quantity = $request->quantity;
+        $product->status = $request->status;
+        $product->category_id = $request->category_id;
+        $product->thumbnail_url = $request->thumbnail_url;
+
+
+        $product->save();
+
+        return redirect()->route('products.index');
     }
 
     /**
@@ -35,10 +61,21 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    // Tra ve thong tin ban ghi product theo id
     public function show($id)
     {
         //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Product $id)
+    {
+        $cate = Category::all();
+        return view('product.create', ['product' => $id,'categories' => $cate]);
     }
 
     /**
@@ -48,10 +85,22 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    // Cap nhat thong tin cua 1 ban ghi
-    public function update(Request $request, $id)
+    public function update(ProductRequest $request,$id)
     {
-        //
+        $product = Product::find($id);
+        $product->name = $request->name;
+        $product->description = $request->description;
+        $product->short_description = $request->short_description;
+        $product->price = $request->price;
+        $product->quantity = $request->quantity;
+        $product->status = $request->status;
+        $product->category_id = $request->category_id;
+        $product->thumbnail_url = $request->thumbnail_url;
+
+
+        $product->update();
+
+        return redirect()->route('products.index');
     }
 
     /**
@@ -60,9 +109,10 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    // Xoa 1 ban ghi product
-    public function destroy($id)
-    {
-        //
+    public function delete($id) {
+        $product = Product::find($id);
+        if ($product->delete()) {
+            return redirect()->route('products.index');
+        }
     }
 }
