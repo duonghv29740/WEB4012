@@ -26,7 +26,7 @@ class ProductFactory extends Factory
             'thumbnail_url' => $this->faker->imageUrl($width = 640, $height = 480),
             'quantity' => $this->faker->numberBetween(100,150),
             'status' => $this->faker->numberBetween(0,1),
-            'category_id' => $this->faker->numberBetween(10)
+            'category_id' => $this->faker->numberBetween(1,10)
         ];
     }
 }

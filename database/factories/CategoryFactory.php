@@ -25,6 +25,7 @@ class CategoryFactory extends Factory
             'name' => $name,
             'description' => $this->faker->text(),
             'status' => $this->faker->numberBetween(0, 1),
+            'parent_id' => 0,
             'slug' => $slug
         ];
     }

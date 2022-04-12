@@ -1,12 +1,12 @@
 @extends('layout.master')
 
-@section('title', 'Products page')
+@section('title', 'News page')
 
-@section('content-title', 'Products page')
+@section('content-title', 'News page')
 
 @section('content')
     <div>
-        <a href="{{ route('products.create') }}">
+        <a href="{{ route('news.create') }}">
             <button class="btn btn-primary">Create</button>
         </a>
     </div>
@@ -14,39 +14,26 @@
         <thead>
             <th>ID</th>
             <th>Name</th>
-            <th>Thumbnail Url</th>
-            <th>Category</th>
-            <th>Description</th>
+            <th>Product</th>
             <th>Short description</th>
-            <th>Price</th>
-            <th>Quantity</th>
-            <th>Status</th>
-            <th>Created at</th>
-            <th>Updated at</th>
-            <th>Actions</th>
+            <th>Description</th>
         </thead>
         <tbody>
-            @foreach ($products as $p)
+            @foreach ($news as $n)
                 <tr>
-                    <td>{{ $p->id }}</td>
-                    <td>{{ $p->name }}</td>
-                    <td>
-                        <img src="{{ $p->thumbnail_url }}" alt="" width="200">
-                    </td>
+                    <td>{{ $n->id }}</td>
+                    <td>{{ $n->title }}</td>
                     <td>
                         <ul>
-                            @foreach ($p->categories as $c)
-                                <li>{{ $c->name }}</li>
+                            @foreach ($n->products as $p)
+                                <li>{{ $p->name }}</li>
                             @endforeach
                         </ul>
                     </td>
-                    <td>{{ $p->description ?: 'N/A' }}</td>
-                    <td>{{ $p->short_description ?: 'N/A' }}</td>
-                    <td>{{ $p->price }}</td>
-                    <td>{{ $p->quantity }}</td>
-                    <td>{{ $p->status == 1 ? 'Active' : 'Deactive' }}</td>
-                    <td>{{ $p->created_at ?: 'N/A' }}</td>
-                    <td>{{ $p->updated_at ?: 'N/A' }}</td>
+                    <td>{{ $n->desc ?: 'N/A' }}</td>
+                    <td>{{ $n->short_desc ?: 'N/A' }}</td>
+                    <td>{{ $n->created_at ?: 'N/A' }}</td>
+                    <td>{{ $n->updated_at ?: 'N/A' }}</td>
                     <td>
                         <a href="{{ route('products.edit', $p->id) }}" class="btn btn-warning">Edit</a>
                         <form action="{{ route('products.delete', $p->id) }}" method="POST">
@@ -63,5 +50,5 @@
             @endforeach
         </tbody>
     </table>
-    {{ $products->links() }}
+    {{ $news->links() }}
 @endsection

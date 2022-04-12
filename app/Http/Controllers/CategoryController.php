@@ -6,21 +6,25 @@ use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests\CategoryRequest;
+
 class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::all();
-        $categoriesGet = Category::select('*')
+        $categoriesGet = Category::with('categories')
+            ->withCount('products')
             ->orderBy('id', 'desc')
             ->paginate(10);
-
-        return view('category.index', ['categories' => $categoriesGet]);
+        // dd($categoriesGet);
+        return view('category.index', [
+            'categories' => $categoriesGet
+        ]);
     }
 
     public function create()
     {
-        return view('category.create');
+        $parent = Category::all();
+        return view('category.create', ['parent' => $parent]);
     }
 
     public function store(CategoryRequest $request)
@@ -30,7 +34,8 @@ class CategoryController extends Controller
         $category->name = $categoryRequest['name'];
         $category->description = $categoryRequest['description'];
         $category->status = $categoryRequest['status'];
-        $category->slug = Str::slug($categoryRequest['name']).'-'.uniqid();
+        $category->parent_id = $categoryRequest['parent_id'];
+        $category->slug = Str::slug($categoryRequest['name']) . '-' . uniqid();
 
         $category->save();
 
@@ -39,22 +44,28 @@ class CategoryController extends Controller
 
     public function edit(Category $id)
     {
-        return view('category.create', ['category' => $id]);
+        $parent = Category::all();
+        return view('category.create', [
+            'category' => $id,
+            'parent' => $parent
+        ]);
     }
-    public function update(CategoryRequest $request, Category $id){
+    public function update(CategoryRequest $request, Category $id)
+    {
 
         $cateUpdate = $id;
         $cateUpdate->name = $request->name;
         $cateUpdate->description = $request->description;
         $cateUpdate->status = $request->status;
-        $cateUpdate->slug = Str::slug($request->name).'-'.uniqid();
+        $cateUpdate->parent_id = $request->parent_id;
+        $cateUpdate->slug = Str::slug($request->name) . '-' . uniqid();
 
         $cateUpdate->update();
 
         return redirect()->route('categories.index');
-
     }
-    public function delete(Category $cate) {
+    public function delete(Category $cate)
+    {
         if ($cate->delete()) {
             return redirect()->route('categories.index');
         }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\EditProductRequest;
 use App\Http\Requests\ProductRequest;
 use App\Models\Category;
 use App\Models\Product;
@@ -16,8 +17,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::orderBy('id','desc')->paginate(20);
-        return view('product.index',['products' => $products]);
+        $products = Product::with('categories')->orderBy('id', 'desc')->paginate(20);
+        // dd($products);
+        return view('product.index', ['products' => $products]);
     }
 
     /**
@@ -28,7 +30,7 @@ class ProductController extends Controller
     public function create()
     {
         $cate = Category::all();
-        return view('product.create',['categories' => $cate]);
+        return view('product.create', ['categories' => $cate]);
     }
 
     /**
@@ -47,8 +49,13 @@ class ProductController extends Controller
         $product->quantity = $request->quantity;
         $product->status = $request->status;
         $product->category_id = $request->category_id;
-        $product->thumbnail_url = $request->thumbnail_url;
 
+        if ($request->hasFile('thumbnail_url')) {
+            $file = $request->thumbnail_url;
+            $fileHasname = $file->hashName();
+            $filename = $request->name . '_' . $fileHasname;
+            $product->thumbnail_url = $file->storeAs('images/products', $filename);
+        }
 
         $product->save();
 
@@ -72,10 +79,10 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Product $id)
+    public function edit(Product $pro)
     {
         $cate = Category::all();
-        return view('product.create', ['product' => $id,'categories' => $cate]);
+        return view('product.create', ['product' => $pro, 'categories' => $cate]);
     }
 
     /**
@@ -85,20 +92,30 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ProductRequest $request,$id)
+    public function update(EditProductRequest $request, Product $pro)
     {
-        $product = Product::find($id);
-        $product->name = $request->name;
-        $product->description = $request->description;
-        $product->short_description = $request->short_description;
-        $product->price = $request->price;
-        $product->quantity = $request->quantity;
-        $product->status = $request->status;
-        $product->category_id = $request->category_id;
-        $product->thumbnail_url = $request->thumbnail_url;
+        // $product = Product::find($id);
+        $pro->name = $request->name;
+        $pro->description = $request->description;
+        $pro->short_description = $request->short_description;
+        $pro->price = $request->price;
+        $pro->quantity = $request->quantity;
+        $pro->status = $request->status;
+        $pro->category_id = $request->category_id;
+        $pro->thumbnail_url = $request->thumbnail_url;
 
+        if ($request->hasFile('thumbnail_url')) {
+            $file = $request->thumbnail_url;
+            $fileHasname = $file->hashName();
+            $filename = $request->name . '_' . $fileHasname;
+            $pro->thumbnail_url = $file->storeAs('images/products', $filename);
+        } else {
+            $pro->thumbnail_url = $request->thumbnail_url;
+        }
 
-        $product->update();
+        $pro->save();
+
+        $pro->update();
 
         return redirect()->route('products.index');
     }
@@ -109,9 +126,9 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function delete($id) {
-        $product = Product::find($id);
-        if ($product->delete()) {
+    public function delete(Product $pro)
+    {
+        if ($pro->delete()) {
             return redirect()->route('products.index');
         }
     }

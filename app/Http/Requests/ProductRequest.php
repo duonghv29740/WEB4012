@@ -35,7 +35,7 @@ class ProductRequest extends FormRequest
     }
     public function messages()
     {
-        return[
+        return [
             'name.required' => 'Tên không được để trống',
             'name.min' => 'Tên phải từ 6 ký tự trở lên',
             'name.max' => 'Tên tối đa có 32 ký tự',
