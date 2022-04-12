@@ -57,6 +57,7 @@ Route::get('/', function () {
 Route::middleware(['auth', 'authActive'])->prefix('/categories')->name('categories.')->group(function () {
     // Danh sach
     Route::get('/', [CategoryController::class, 'index'])->name('index');
+    Route::get('/children/{id}', [CategoryController::class, 'children'])->name('children');
     // Tao moi
     Route::get('/create', [CategoryController::class, 'create'])->name('create');
     Route::post('/store', [CategoryController::class, 'store'])->name('store');

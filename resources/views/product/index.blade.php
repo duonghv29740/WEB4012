@@ -31,7 +31,7 @@
                     <td>{{ $p->id }}</td>
                     <td>{{ $p->name }}</td>
                     <td>
-                        <img src="{{ $p->thumbnail_url }}" alt="" width="200">
+                        <img src="{{ asset($p->thumbnail_url) }}" alt="" width="200">
                     </td>
                     <td>
                         <ul>

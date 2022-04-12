@@ -32,7 +32,7 @@
                 @if ($category->parent_id == 0)
                     <tr>
                         <td>{{ $category->id }}</td>
-                        <td>{{ $category->name }}</td>
+                        <td><a href="{{ route('categories.children', $category->id) }}">{{ $category->name }}</a></td>
                         <td>{{ $category->products_count }}</td>
                         <td>{{ $category->description ?: 'N/A' }}</td>
                         <td>{{ $category->slug ?: 'N/A' }}</td>

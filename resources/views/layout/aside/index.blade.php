@@ -43,30 +43,32 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="{{ route('categories.index') }}"
-                        class="nav-link {{ Route::is('categories.index') ? 'active' : '' }}">
-                        <p>Category</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('products.index') }}"
-                        class="nav-link {{ Route::is('products.index') ? 'active' : '' }}">
-                        <p>Product</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('users.index') }}"
-                        class="nav-link {{ Route::is('users.index') ? 'active' : '' }}">
-                        <p>User</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('news.index') }}"
-                        class="nav-link {{ Route::is('news.index') ? 'active' : '' }}">
-                        <p>News</p>
-                    </a>
-                </li>
+                @auth
+                    <li class="nav-item">
+                        <a href="{{ route('categories.index') }}"
+                            class="nav-link {{ Route::is('categories.index') ? 'active' : '' }}">
+                            <p>Category</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('products.index') }}"
+                            class="nav-link {{ Route::is('products.index') ? 'active' : '' }}">
+                            <p>Product</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('users.index') }}"
+                            class="nav-link {{ Route::is('users.index') ? 'active' : '' }}">
+                            <p>User</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('news.index') }}"
+                            class="nav-link {{ Route::is('news.index') ? 'active' : '' }}">
+                            <p>News</p>
+                        </a>
+                    </li>
+                @endauth
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

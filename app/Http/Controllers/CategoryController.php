@@ -20,7 +20,12 @@ class CategoryController extends Controller
             'categories' => $categoriesGet
         ]);
     }
-
+    public function children($id)
+    {
+        $cate = Category::find($id);
+        $categories = Category::where('parent_id', '=', $id)->get();
+        return view('category.children', ['categories' => $categories, 'cate' => $cate]);
+    }
     public function create()
     {
         $parent = Category::all();
