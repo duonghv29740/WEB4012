@@ -15,6 +15,7 @@
             <th>ID</th>
             <th>Name</th>
             <th>Email</th>
+            <th>Status</th>
             <th>Created at</th>
             <th>Updated at</th>
             <th>Actions</th>
@@ -25,6 +26,8 @@
                     <td>{{ $u->id }}</td>
                     <td>{{ $u->name }}</td>
                     <td>{{ $u->email }}</td>
+
+                    <td>{{ $u->status == 1 ? 'Active' : 'Deactie' }}</td>
                     <td>{{ $u->created_at ?: 'N/A' }}</td>
                     <td>{{ $u->updated_at ?: 'N/A' }}</td>
                     <td>
